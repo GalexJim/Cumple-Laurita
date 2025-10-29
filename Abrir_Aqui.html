@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Cumpleaños Laurita</title>
+    
+    <!-- 
+    Página de cumpleaños para Laurita
+    Las imágenes se cargan desde:
+    - Cumple_Laura\Happy.jpg
+    - Cumple_Laura\Birthday.jpg
+    - Cumple_Laura\To you.jpg
+    
+    Nota: Si el servidor usa slash en vez de backslash, cambiar a:
+    - Cumple_Laura/Happy.jpg
+    - Cumple_Laura/Birthday.jpg
+    - Cumple_Laura/To you.jpg
+    -->
+    
+    <!-- Google Fonts - Fuente cursiva elegante -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ============================================
+           VARIABLES Y RESET BASE
+        ============================================ */
+        :root {
+            --rosado-pastel: #ffd6e8;
+            --menta: #c8f7e5;
+            --blanco: #ffffff;
+            --sombra: rgba(0, 0, 0, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Dancing Script', cursive;
+            font-style: italic;
+            background: linear-gradient(135deg, var(--rosado-pastel) 0%, var(--menta) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* ============================================
+           SOBRE/CARTA (ESTADO CERRADO)
+        ============================================ */
+        #envelope-container {
+            position: relative;
+            width: 350px;
+            height: 250px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            z-index: 100;
+            animation: envelopeGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes envelopeGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 15px rgba(255, 179, 230, 0.5))
+                        drop-shadow(0 0 25px rgba(200, 247, 229, 0.3));
+            }
+            50% {
+                filter: drop-shadow(0 0 25px rgba(255, 179, 230, 0.7))
+                        drop-shadow(0 0 35px rgba(200, 247, 229, 0.5));
+            }
+        }
+        
+        #envelope-container:hover {
+            transform: scale(1.05);
+        }
+        
+        #envelope-container:focus {
+            outline: 3px solid #ff69b4;
+            outline-offset: 5px;
+        }
+        
+        .envelope {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: linear-gradient(145deg, #ffffff 0%, #fff5fa 100%);
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(255, 179, 230, 0.3),
+                        0 5px 15px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 3px rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Solapa del sobre */
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 175px solid transparent;
+            border-right: 175px solid transparent;
+            border-top: 125px solid #ffd1e8;
+            transform-origin: top center;
+            transition: transform 1s ease;
+            z-index: 2;
+            filter: drop-shadow(0 2px 8px rgba(255, 179, 230, 0.4));
+        }
+        
+        .envelope-body {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(180deg, #fff0f7 0%, #ffe6f2 100%);
+            border-radius: 0 0 15px 15px;
+            box-shadow: inset 0 2px 10px rgba(255, 179, 230, 0.2);
+        }
+        
+        /* Texto "Click aquí" */
+        .click-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 28px;
+            color: #ff69b4;
+            font-weight: 700;
+            z-index: 3;
+            text-shadow: 2px 2px 4px var(--sombra),
+                         0 0 10px rgba(255, 105, 180, 0.5);
+            pointer-events: none;
+        }
+        
+        /* Animación de apertura */
+        .opened .envelope-flap {
+            transform: rotateX(180deg);
+        }
+        
+        .opened {
+            animation: envelopeDisappear 0.8s ease 1s forwards;
+        }
+        
+        @keyframes envelopeDisappear {
+            to {
+                opacity: 0;
+                transform: scale(0.8) translateY(-50px);
+            }
+        }
+        
+        /* ============================================
+           CONTENIDO (TÍTULO, FOTOS, CONFETI)
+        ============================================ */
+        #content {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            max-width: 1200px;
+            width: 90%;
+            position: relative;
+            z-index: 100;
+        }
+        
+        #content.show {
+            display: block;
+            animation: fadeIn 1s ease 1.5s both;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Título principal */
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            color: #ffb3e6;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(255, 179, 230, 0.8), 
+                         0 0 40px rgba(255, 179, 230, 0.5),
+                         3px 3px 6px var(--sombra);
+            font-weight: 700;
+        }
+        
+        /* ============================================
+           CONFETI ANIMADO (Canvas)
+        ============================================ */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            display: none;
+        }
+        
+        #confetti-canvas.show {
+            display: block;
+        }
+        
+        /* ============================================
+           GALERÍA DE POLAROIDS
+        ============================================ */
+        .polaroid-gallery {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        
+        .polaroid {
+            background: var(--blanco);
+            padding: 15px;
+            padding-bottom: 60px;
+            box-shadow: 0 8px 20px var(--sombra);
+            border-radius: 3px;
+            width: 280px;
+            transform: rotate(0deg);
+            transition: transform 0.3s ease;
+            animation: polaroidAppear 0.8s ease both;
+            position: relative;
+            z-index: 100;
+        }
+        
+        .polaroid:nth-child(1) {
+            transform: rotate(-5deg);
+            animation-delay: 2s;
+        }
+        
+        .polaroid:nth-child(2) {
+            transform: rotate(3deg);
+            animation-delay: 2.3s;
+        }
+        
+        .polaroid:nth-child(3) {
+            transform: rotate(-4deg);
+            animation-delay: 2.6s;
+        }
+        
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 10;
+        }
+        
+        @keyframes polaroidAppear {
+            from {
+                opacity: 0;
+                transform: translateY(50px) rotate(0deg);
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .polaroid img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+            border-radius: 2px;
+        }
+        
+        /* ============================================
+           RESPONSIVE MOBILE
+        ============================================ */
+        @media (max-width: 768px) {
+            #envelope-container {
+                width: 80vw;
+                height: calc(80vw * 0.71);
+                max-width: 350px;
+                max-height: 250px;
+            }
+            
+            .click-text {
+                font-size: 24px;
+            }
+            
+            .polaroid-gallery {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .polaroid {
+                width: 85vw;
+                max-width: 320px;
+            }
+            
+            .polaroid img {
+                height: 400px;
+            }
+            
+            h1 {
+                font-size: 3rem;
+                margin-bottom: 30px;
+            }
+        }
+        
+        /* ============================================
+           ACCESIBILIDAD - REDUCED MOTION
+        ============================================ */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .envelope-flap {
+                transition: none;
+            }
+            
+            #envelope-container:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Canvas para confeti -->
+    <canvas id="confetti-canvas"></canvas>
+    
+    <!-- Sobre cerrado (estado inicial) -->
+    <div id="envelope-container" 
+         role="button" 
+         tabindex="0" 
+         aria-label="Haz clic para abrir la carta de cumpleaños"
+         aria-describedby="click-instruction">
+        <div class="envelope">
+            <div class="envelope-flap"></div>
+            <div class="envelope-body"></div>
+            <div class="click-text" id="click-instruction">Click aquí</div>
+        </div>
+    </div>
+    
+    <!-- Contenido revelado tras abrir -->
+    <div id="content" role="main" aria-live="polite">
+        <h1>¡Feliz cumpleaños Laurita!</h1>
+        
+        <div class="polaroid-gallery">
+            <div class="polaroid">
+                <img src="Cumple_Laura\Happy.jpg" 
+                     alt="Happy" 
+                     loading="lazy"
+                     title="Happy.jpg">
+            </div>
+            <div class="polaroid">
+                <img src="Cumple_Laura\Birthday.jpg" 
+                     alt="Birthday" 
+                     loading="lazy"
+                     title="Birthday.jpg">
+            </div>
+            <div class="polaroid">
+                <img src="Cumple_Laura\To you.jpg" 
+                     alt="To you" 
+                     loading="lazy"
+                     title="To you.jpg">
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        /* ============================================
+           JAVASCRIPT - INTERACCIÓN Y CONFETI
+        ============================================ */
+        
+        // Referencias a elementos
+        const envelopeContainer = document.getElementById('envelope-container');
+        const envelope = document.querySelector('.envelope');
+        const content = document.getElementById('content');
+        const confettiCanvas = document.getElementById('confetti-canvas');
+        const ctx = confettiCanvas.getContext('2d');
+        
+        // Variables para confeti
+        let confettiParticles = [];
+        let animationFrame;
+        
+        // Configurar canvas
+        function resizeCanvas() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        /* ============================================
+           FUNCIÓN DE APERTURA DEL SOBRE
+        ============================================ */
+        function openEnvelope() {
+            // Añadir clase de animación
+            envelope.parentElement.classList.add('opened');
+            
+            // Mostrar contenido después de la animación
+            setTimeout(() => {
+                envelopeContainer.style.display = 'none';
+                content.classList.add('show');
+                confettiCanvas.classList.add('show');
+                
+                // Iniciar confeti
+                createConfetti();
+                animateConfetti();
+            }, 1800);
+        }
+        
+        /* ============================================
+           EVENTOS DE CLICK Y TECLADO
+        ============================================ */
+        envelopeContainer.addEventListener('click', openEnvelope);
+        
+        envelopeContainer.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openEnvelope();
+            }
+        });
+        
+        /* ============================================
+           SISTEMA DE CONFETI
+        ============================================ */
+        class ConfettiParticle {
+            constructor() {
+                this.x = Math.random() * confettiCanvas.width;
+                this.y = -10;
+                this.size = Math.random() * 8 + 4;
+                this.speedY = Math.random() * 3 + 2;
+                this.speedX = Math.random() * 2 - 1;
+                this.color = this.randomColor();
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 10 - 5;
+            }
+            
+            randomColor() {
+                const colors = [
+                    '#ff69b4', '#ffd6e8', '#c8f7e5', 
+                    '#ffb3d9', '#98fb98', '#dda0dd',
+                    '#f0e68c', '#87ceeb'
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.rotation += this.rotationSpeed;
+                
+                // Gravedad sutil
+                this.speedY += 0.05;
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.fillStyle = this.color;
+                ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+                ctx.restore();
+            }
+        }
+        
+        function createConfetti() {
+            confettiParticles = [];
+            for (let i = 0; i < 150; i++) {
+                confettiParticles.push(new ConfettiParticle());
+            }
+        }
+        
+        function animateConfetti() {
+            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            
+            confettiParticles.forEach((particle, index) => {
+                particle.update();
+                particle.draw();
+                
+                // Remover partículas que salieron de la pantalla y crear una nueva
+                if (particle.y > confettiCanvas.height) {
+                    confettiParticles[index] = new ConfettiParticle();
+                }
+            });
+            
+            // Añadir nuevas partículas ocasionalmente para mantener la cantidad
+            if (confettiParticles.length < 150 && Math.random() < 0.1) {
+                confettiParticles.push(new ConfettiParticle());
+            }
+            
+            animationFrame = requestAnimationFrame(animateConfetti);
+        }
+    </script>
+</body>
+</html>
